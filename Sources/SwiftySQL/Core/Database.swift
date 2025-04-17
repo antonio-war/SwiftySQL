@@ -17,8 +17,8 @@ public actor Database: Sendable {
     }
     
     public func connect() throws {
-        let result = try sqlite3_open(path, &pointer)
-        print(result)
+        let result = try sqlite3_open_v2(path, &pointer, flags, nil)
+        guard result == SQLITE_OK else { throw URLError(.badURL) }
     }
     
     private var path: [CChar] {
@@ -30,7 +30,11 @@ public actor Database: Sendable {
         }
     }
     
+    private var flags: Int32 {
+        SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX
+    }
+    
     deinit {
-        sqlite3_close(pointer)
+        sqlite3_close_v2(pointer)
     }
 }

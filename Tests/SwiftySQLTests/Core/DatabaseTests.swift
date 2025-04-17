@@ -18,6 +18,7 @@ struct DatabaseTests {
         let url = fileManager.temporaryDirectory.appending(path: "test.sqlite")
         let configuration = Configuration(url: url)
         let database = Database(configuration: configuration)
+        #expect(database.pointer == nil)
         try await database.connect()
         #expect(database.pointer != nil)
     }
