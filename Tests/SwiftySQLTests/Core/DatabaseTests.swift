@@ -8,7 +8,6 @@
 import Foundation
 @testable import SwiftySQL
 import Testing
-import XCTest
 
 @Suite
 struct DatabaseTests {

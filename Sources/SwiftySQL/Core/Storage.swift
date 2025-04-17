@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SQLite3
 
 public enum Storage: Sendable {
     case persistent(url: URL)
