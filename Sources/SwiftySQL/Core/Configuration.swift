@@ -8,5 +8,5 @@
 import Foundation
 
 public struct Configuration: Sendable {
-    public let url: URL
+    public let storage: Storage
 }

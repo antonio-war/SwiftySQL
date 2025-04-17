@@ -23,7 +23,11 @@ public actor Database: Sendable {
     
     private var path: [CChar] {
         get throws {
-            guard let path = configuration.url.path().cString(using: .utf8) else {
+            let path = switch configuration.storage {
+            case .persistent(let url): url.path()
+            case .volatile: ":memory:"
+            }
+            guard let path = path.cString(using: .utf8) else {
                 throw URLError(.badURL)
             }
             return path
@@ -31,7 +35,11 @@ public actor Database: Sendable {
     }
     
     private var flags: Int32 {
-        SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX
+        let storageFlags = switch configuration.storage {
+            case .persistent: SQLITE_OPEN_URI
+            case .volatile: SQLITE_OPEN_MEMORY
+        }
+        return storageFlags | SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX
     }
     
     deinit {
