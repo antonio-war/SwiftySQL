@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftySQL",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v16),
         .macOS(.v13)

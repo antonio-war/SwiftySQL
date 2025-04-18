@@ -1,0 +1,51 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "An active connection to this database already exists." : {
+
+    },
+    "Check database configuration and ensure the database server is running." : {
+
+    },
+    "Check for ongoing transactions or queries that might be preventing disconnection." : {
+
+    },
+    "Close the existing connection before attempting to reconnect, or use the established connection." : {
+
+    },
+    "Database connection already established" : {
+
+    },
+    "Database connection does not exists" : {
+
+    },
+    "Establish a connection to the database server before performing this operation." : {
+
+    },
+    "Failed to create a database connection" : {
+
+    },
+    "Failed to destroy a database connection" : {
+
+    },
+    "Invalid storage URL" : {
+
+    },
+    "Please provide a valid file path URL that uses only supported characters." : {
+
+    },
+    "The connection attempt was unsuccessful." : {
+
+    },
+    "The disconnection attempt was unsuccessful." : {
+
+    },
+    "The operation requires an active database connection." : {
+
+    },
+    "The URL contains characters that cannot be represented in the required format." : {
+
+    }
+  },
+  "version" : "1.0"
+}
