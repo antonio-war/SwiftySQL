@@ -14,7 +14,7 @@ struct DatabaseTests {
     private let fileManager: FileManager = .default
     
     @Test func connectWhenStorageIsPersistentThenConnectedShouldBeTrue() async throws {
-        let url = fileManager.temporaryDirectory.appending(path: "test.sqlite")
+        let url = fileManager.temporaryDirectory.appending(path: "database.sqlite")
         let configuration = Configuration(storage: .persistent(url: url))
         let database = Database(configuration: configuration)
         try await database.connect()
@@ -29,7 +29,7 @@ struct DatabaseTests {
     }
     
     @Test func connectWhenStorageIsPersistentAndUrlIsNotValidThenAnErrorSouldBeThrown() async throws {
-        let url = try #require(URL(string: "file:///path/to/file"))
+        let url = try #require(URL(string: "file:///database.sqlite"))
         let configuration = Configuration(storage: .persistent(url: url))
         let database = Database(configuration: configuration)
         await #expect(throws: DatabaseError.connectionFailed) {
