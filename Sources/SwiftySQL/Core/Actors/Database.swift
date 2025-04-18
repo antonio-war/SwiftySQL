@@ -21,33 +21,18 @@ public actor Database: Sendable {
     }
     
     public func connect() throws {
-        let result = try sqlite3_open_v2(path, &pointer, flags, nil)
-        guard result == SQLITE_OK else { throw URLError(.badURL) }
+        guard status == .disconnected else { throw DatabaseError.existingConnection }
+        let result = try sqlite3_open_v2(configuration.path, &pointer, configuration.flags, nil)
+        guard result == SQLITE_OK else { throw DatabaseError.connectionFailed }
     }
     
-    private var path: [CChar] {
-        get throws {
-            let path = switch configuration.storage {
-            case .persistent(let url): url.path()
-            case .volatile: ":memory:"
-            }
-            guard let path = path.cString(using: .utf8) else {
-                throw URLError(.badURL)
-            }
-            return path
-        }
+    public func disconnect() throws {
+        guard status == .connected else { throw DatabaseError.missingConnection }
+        let result = sqlite3_close_v2(pointer)
+        guard result == SQLITE_OK else { throw DatabaseError.disconnectionFailed }
+        pointer = nil
     }
-    
-    private var flags: Int32 {
-        let concurrencyFlags = SQLITE_OPEN_FULLMUTEX
-        let storageFlags = switch configuration.storage {
-            case .persistent: SQLITE_OPEN_URI
-            case .volatile: SQLITE_OPEN_MEMORY
-        }
-        return concurrencyFlags | storageFlags | SQLITE_OPEN_READWRITE
-//        return storageFlags | SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX
-    }
-    
+        
     deinit {
         sqlite3_close_v2(pointer)
     }
