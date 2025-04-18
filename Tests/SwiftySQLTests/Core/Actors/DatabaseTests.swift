@@ -13,19 +13,19 @@ import Testing
 struct DatabaseTests {
     private let fileManager: FileManager = .default
     
-    @Test func connectWhenStorageIsPersistentThenStatusShouldBeConnected() async throws {
+    @Test func connectWhenStorageIsPersistentThenConnectedShouldBeTrue() async throws {
         let url = fileManager.temporaryDirectory.appending(path: "test.sqlite")
         let configuration = Configuration(storage: .persistent(url: url))
         let database = Database(configuration: configuration)
         try await database.connect()
-        await #expect(database.status == .connected)
+        #expect(await database.connected)
     }
     
-    @Test func connectWhenStorageIsVolatileThenStatusShouldBeConnected() async throws {
+    @Test func connectWhenStorageIsVolatileThenConnectedShouldBeTrue() async throws {
         let configuration = Configuration(storage: .volatile)
         let database = Database(configuration: configuration)
         try await database.connect()
-        await #expect(database.status == .connected)
+        #expect(await database.connected)
     }
     
     @Test func connectWhenStorageIsPersistentAndUrlIsNotValidThenAnErrorSouldBeThrown() async throws {
@@ -54,21 +54,21 @@ struct DatabaseTests {
         }
     }
     
-    @Test func disconnectWhenStorageIsPersistentThenStatusShouldBeDisconnected() async throws {
+    @Test func disconnectWhenStorageIsPersistentThenConnectedShouldBeFalse() async throws {
         let url = fileManager.temporaryDirectory.appending(path: "test.sqlite")
         let configuration = Configuration(storage: .persistent(url: url))
         let database = Database(configuration: configuration)
         try await database.connect()
         try await database.disconnect()
-        await #expect(database.status == .disconnected)
+        #expect(await !database.connected)
     }
     
-    @Test func disconnectWhenStorageIsVolatileThenStatusShouldBeDisconnected() async throws {
+    @Test func disconnectWhenStorageIsVolatileThenConnectedShouldBeFalse() async throws {
         let configuration = Configuration(storage: .volatile)
         let database = Database(configuration: configuration)
         try await database.connect()
         try await database.disconnect()
-        await #expect(database.status == .disconnected)
+        #expect(await !database.connected)
     }
     
     @Test func disconnectWhenDatabaseIsNotConnectedWhenAnErrorShouldBeThrown() async throws {

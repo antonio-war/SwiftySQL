@@ -16,18 +16,19 @@ public actor Database: Sendable {
         self.configuration = configuration
     }
     
-    public var status: Status {
-        pointer != nil ? .connected : .disconnected
+    public var connected: Bool {
+        pointer != nil
     }
     
     public func connect() throws {
-        guard status == .disconnected else { throw DatabaseError.existingConnection }
+        guard !connected else { throw DatabaseError.existingConnection }
         let result = try sqlite3_open_v2(configuration.path, &pointer, configuration.flag, nil)
         guard result == SQLITE_OK else { throw DatabaseError.connectionFailed }
+        guard pointer != nil else { throw DatabaseError.connectionFailed }
     }
     
     public func disconnect() throws {
-        guard status == .connected else { throw DatabaseError.missingConnection }
+        guard connected else { throw DatabaseError.missingConnection }
         let result = sqlite3_close_v2(pointer)
         guard result == SQLITE_OK else { throw DatabaseError.disconnectionFailed }
         pointer = nil
