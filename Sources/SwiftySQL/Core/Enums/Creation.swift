@@ -7,7 +7,7 @@
 
 import SQLite3
 
-public enum Creation: Sendable {
+public enum Creation: Flaggable {
     case automatic
     case manual
     

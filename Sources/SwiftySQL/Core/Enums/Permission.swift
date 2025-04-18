@@ -7,7 +7,7 @@
 
 import SQLite3
 
-public enum Permission: Sendable {
+public enum Permission: Flaggable {
     case readOnly
     case readAndWrite
     

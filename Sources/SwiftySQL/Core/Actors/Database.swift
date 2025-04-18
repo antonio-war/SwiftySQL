@@ -22,7 +22,7 @@ public actor Database: Sendable {
     
     public func connect() throws {
         guard status == .disconnected else { throw DatabaseError.existingConnection }
-        let result = try sqlite3_open_v2(configuration.path, &pointer, configuration.flags, nil)
+        let result = try sqlite3_open_v2(configuration.path, &pointer, configuration.flag, nil)
         guard result == SQLITE_OK else { throw DatabaseError.connectionFailed }
     }
     

@@ -7,7 +7,7 @@
 
 import SQLite3
 
-public enum Threading: Sendable {
+public enum Threading: Flaggable {
     case concurrent
     case serialized
     

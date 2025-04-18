@@ -7,7 +7,7 @@
 
 import SQLite3
 
-public enum Cache: Sendable {
+public enum Cache: Flaggable {
     case `private`
     case `shared`
     

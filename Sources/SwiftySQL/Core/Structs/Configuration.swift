@@ -7,14 +7,28 @@
 
 import Foundation
 
-public struct Configuration: Sendable {
+public struct Configuration: Flaggable {
     public let storage: Storage
     public let permission: Permission
     public let creation: Creation
     public let cache: Cache
     public let threading: Threading
     
-    var flags: Int32 {
+    public init(
+        storage: Storage,
+        permission: Permission = .readAndWrite,
+        creation: Creation = .automatic,
+        cache: Cache = .private,
+        threading: Threading = .concurrent
+    ) {
+        self.storage = storage
+        self.permission = permission
+        self.creation = creation
+        self.cache = cache
+        self.threading = threading
+    }
+    
+    var flag: Int32 {
         storage.flag | permission.flag | creation.flag | cache.flag | threading.flag
     }
     

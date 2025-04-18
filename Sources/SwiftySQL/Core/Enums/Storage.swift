@@ -8,7 +8,7 @@
 import Foundation
 import SQLite3
 
-public enum Storage: Sendable {
+public enum Storage: Flaggable {
     case persistent(url: URL)
     case volatile
     
