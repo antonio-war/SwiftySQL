@@ -46,6 +46,14 @@ struct DatabaseTests {
         }
     }
     
+    @Test func connectWhenCreationIsAutomaticAndPermissionIsReadOnlyThenAnErrorShouldBeThrown() async throws {
+        let configuration = Configuration(storage: .volatile, permission: .readOnly, creation: .automatic)
+        let database = Database(configuration: configuration)
+        await #expect(throws: DatabaseError.connectionFailed) {
+            try await database.connect()
+        }
+    }
+    
     @Test func disconnectWhenStorageIsPersistentThenStatusShouldBeDisconnected() async throws {
         let url = fileManager.temporaryDirectory.appending(path: "test.sqlite")
         let configuration = Configuration(storage: .persistent(url: url))
@@ -61,5 +69,13 @@ struct DatabaseTests {
         try await database.connect()
         try await database.disconnect()
         await #expect(database.status == .disconnected)
+    }
+    
+    @Test func disconnectWhenDatabaseIsNotConnectedWhenAnErrorShouldBeThrown() async throws {
+        let configuration = Configuration(storage: .volatile)
+        let database = Database(configuration: configuration)
+        await #expect(throws: DatabaseError.missingConnection) {
+            try await database.disconnect()
+        }
     }
 }
