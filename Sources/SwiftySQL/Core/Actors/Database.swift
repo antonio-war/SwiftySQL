@@ -9,11 +9,15 @@ import Foundation
 import SQLite3
 
 public actor Database: Sendable {
-    nonisolated(unsafe) private(set) var pointer: OpaquePointer? = nil
+    nonisolated(unsafe) private var pointer: OpaquePointer? = nil
     public let configuration: Configuration
     
     public init(configuration: Configuration) {
         self.configuration = configuration
+    }
+    
+    public var status: Status {
+        pointer != nil ? .connected : .disconnected
     }
     
     public func connect() throws {
@@ -35,11 +39,13 @@ public actor Database: Sendable {
     }
     
     private var flags: Int32 {
+        let concurrencyFlags = SQLITE_OPEN_FULLMUTEX
         let storageFlags = switch configuration.storage {
             case .persistent: SQLITE_OPEN_URI
             case .volatile: SQLITE_OPEN_MEMORY
         }
-        return storageFlags | SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX
+        return concurrencyFlags | storageFlags | SQLITE_OPEN_READWRITE
+//        return storageFlags | SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX
     }
     
     deinit {

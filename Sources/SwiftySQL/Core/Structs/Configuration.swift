@@ -9,4 +9,7 @@ import Foundation
 
 public struct Configuration: Sendable {
     public let storage: Storage
+    public let permission: Permission
+    public let autocreate: Bool
+    public let cache: Cache
 }
